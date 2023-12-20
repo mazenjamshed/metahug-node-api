@@ -5,7 +5,7 @@ frameworkVersion: "3"
 
 custom:
   tableName: "users-table3-${sls:stage}"
-  tableNameQuestions: "questions-table3-${sls:stage}"
+  tableNameQuestions: "questions-table4-${sls:stage}"
   tableNameAnything: "anything-table3-${sls:stage}"
 
 provider:
@@ -52,17 +52,23 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableName}
+
     QuestionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
           - AttributeName: questionId
             AttributeType: S # Assuming questions have string IDs
         KeySchema:
-          - AttributeName: questionId
+          - AttributeName: userId
             KeyType: HASH
+          - AttributeName: questionId
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableNameQuestions}
+
     AnythingTable:
       Type: AWS::DynamoDB::Table
       Properties:
